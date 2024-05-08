@@ -2,14 +2,14 @@ package com.example.btlapi.Domain;
 
 public class Price {
     private int Id;
-    private String Value;
+    private String Prices;
 
     public Price() {
     }
 
     @Override
     public String toString() {
-        return   Value;
+        return   Prices;
     }
 
     public int getId() {
@@ -21,10 +21,10 @@ public class Price {
     }
 
     public String getValue() {
-        return Value;
+        return Prices;
     }
 
     public void setValue(String value) {
-        Value = value;
+        Prices = value;
     }
 }

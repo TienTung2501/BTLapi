@@ -2,12 +2,12 @@ package com.example.btlapi.Domain;
 
 public class Location {
     private int Id;
-    private String Loc;
+    private String Locations;
 
 
     @Override
     public String toString() {
-        return Loc;
+        return Locations;
     }
 
     public int getId() {
@@ -19,10 +19,10 @@ public class Location {
     }
 
     public String getLoc() {
-        return Loc;
+        return Locations;
     }
 
     public void setLoc(String loc) {
-        Loc = loc;
+        Locations = loc;
     }
 }

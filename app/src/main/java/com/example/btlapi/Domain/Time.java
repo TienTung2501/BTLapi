@@ -2,13 +2,13 @@ package com.example.btlapi.Domain;
 
 public class Time {
     private int Id;
-    private String Value;
+    private String Times;
     public Time(){
     }
 
     @Override
     public String toString() {
-        return Value;
+        return Times;
     }
 
     public int getId() {
@@ -20,10 +20,10 @@ public class Time {
     }
 
     public String getValue() {
-        return Value;
+        return Times;
     }
 
     public void setValue(String value) {
-        Value = value;
+        Times = value;
     }
 }

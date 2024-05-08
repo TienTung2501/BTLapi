@@ -25,7 +25,6 @@ import retrofit2.Response;
 import com.example.btlapi.Utils.utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
