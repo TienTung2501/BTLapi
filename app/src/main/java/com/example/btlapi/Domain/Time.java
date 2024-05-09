@@ -3,7 +3,10 @@ package com.example.btlapi.Domain;
 public class Time {
     private int Id;
     private String Times;
-    public Time(){
+
+    public Time(int id, String times) {
+        Id = id;
+        Times = times;
     }
 
     @Override

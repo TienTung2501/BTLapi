@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cartViewBestDeal"
     android:layout_width="260dp"
     android:layout_height="295dp"
     android:layout_margin="8dp"
@@ -47,14 +48,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/rateTxt"
-                app:layout_constraintStart_toEndOf="@+id/rateTxt"
-                app:layout_constraintTop_toTopOf="@+id/rateTxt"
+
+                app:layout_constraintBottom_toBottomOf="@+id/starTxt"
+
+                app:layout_constraintStart_toEndOf="@+id/starTxt"
+                app:layout_constraintTop_toTopOf="@+id/starTxt"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/star" />
 
             <TextView
-                android:id="@+id/titleTxt"
+                android:id="@+id/cartTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -76,7 +79,7 @@
                 android:text="4"
                 android:textColor="@color/blue_grey"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/titleTxt" />
+                app:layout_constraintStart_toStartOf="@+id/cartTxt" />
 
             <TextView
                 android:id="@+id/timeTxt"
@@ -110,9 +113,9 @@
                 android:textColor="@color/red"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/titleTxt"
+                app:layout_constraintBottom_toBottomOf="@+id/cartTxt"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/titleTxt" />
+                app:layout_constraintTop_toTopOf="@+id/cartTxt" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

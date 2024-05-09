@@ -1,5 +1,6 @@
 package com.example.btlapi.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -21,31 +22,26 @@ import com.example.btlapi.R;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BestFoodAdapter extends RecyclerView.Adapter<BestFoodAdapter.viewholder> {
-
+public class ListFoodAdapter extends RecyclerView.Adapter<ListFoodAdapter.viewholder> {
     ArrayList<Food> items;
     Context context;
-    public BestFoodAdapter(ArrayList<Food> items){
+    public ListFoodAdapter(ArrayList<Food> items){
         this.items=items;
     }
-
     @NonNull
     @Override
-    public BestFoodAdapter.viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListFoodAdapter.viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context=parent.getContext();
-        View inflate= LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_best_deal,parent,false);
+        View inflate= LayoutInflater.from(context).inflate(R.layout.viewholder_list_food,parent,false);
         return new viewholder(inflate);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BestFoodAdapter.viewholder holder, int position) {
+    public void onBindViewHolder(@NonNull ListFoodAdapter.viewholder holder, @SuppressLint("RecyclerView") int position) {
         holder.titleTxt.setText(items.get(position).getTitle());
-        holder.priceTxt.setText("$"+items.get(position).getPrice());
+        holder.priceTxt.setText(String.valueOf(items.get(position).getPrice()));
+        holder.timeTxt.setText(String.valueOf(items.get(position).getTimeValue())+" min");
         holder.starTxt.setText(String.valueOf(items.get(position).getStar()));
-        holder.timeTxt.setText(items.get(position).getTimeValue()+"min");
-
-
-        //int imageResourceId = getImageResource(items.get(position).getImagePath());
         int imageResourceId = getImageResource(items.get(position).getImagePath());
         if (imageResourceId != 0) {
             Glide.with(context)
@@ -63,7 +59,6 @@ public class BestFoodAdapter extends RecyclerView.Adapter<BestFoodAdapter.viewho
                 context.startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -79,9 +74,9 @@ public class BestFoodAdapter extends RecyclerView.Adapter<BestFoodAdapter.viewho
             super(itemView);
             titleTxt=itemView.findViewById(R.id.cartTxt);
             priceTxt=itemView.findViewById(R.id.priceTxt);
-            starTxt=itemView.findViewById(R.id.starTxt);
             timeTxt=itemView.findViewById(R.id.timeTxt);
-            pic=itemView.findViewById(R.id.pic);
+            starTxt=itemView.findViewById(R.id.rateTxt);
+            pic=itemView.findViewById(R.id.img);
         }
     }
     private int getImageResource(String imageName) {

@@ -1,27 +1,34 @@
 package com.example.btlapi.Domain;
 
-public class Food {
+import java.io.Serializable;
+
+public class Food implements Serializable {
     private int CategoryId;
-    private String Description;
-    private boolean BestFood;
+    private String CreateAt;
+    private String Descriptions;
     private int Id;
+    private String ImagePath;
+    private boolean IsDeleted;
     private int LocationId;
     private double Price;
-    private String ImagePath;
     private int PriceId;
     private double Star;
+    private int StarId;
+
+    public void setStarId(int starId) {
+        StarId = starId;
+    }
+
+    public int getStarId() {
+        return StarId;
+    }
+
     private int TimeId;
     private int TimeValue;
     private String Title;
-    private int numberInCart;
+    private String UpdateAt;
 
-    public Food(){
-    }
-
-
-    @Override
-    public String toString() {
-        return Title;
+    public Food() {
     }
 
     public int getCategoryId() {
@@ -32,20 +39,20 @@ public class Food {
         CategoryId = categoryId;
     }
 
-    public String getDescription() {
-        return Description;
+    public String getCreateAt() {
+        return CreateAt;
     }
 
-    public void setDescription(String description) {
-        Description = description;
+    public void setCreateAt(String createAt) {
+        CreateAt = createAt;
     }
 
-    public boolean isBestFood() {
-        return BestFood;
+    public String getDescriptions() {
+        return Descriptions;
     }
 
-    public void setBestFood(boolean bestFood) {
-        BestFood = bestFood;
+    public void setDescriptions(String descriptions) {
+        Descriptions = descriptions;
     }
 
     public int getId() {
@@ -54,6 +61,22 @@ public class Food {
 
     public void setId(int id) {
         Id = id;
+    }
+
+    public String getImagePath() {
+        return ImagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        ImagePath = imagePath;
+    }
+
+    public boolean isDeleted() {
+        return IsDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        IsDeleted = deleted;
     }
 
     public int getLocationId() {
@@ -70,14 +93,6 @@ public class Food {
 
     public void setPrice(double price) {
         Price = price;
-    }
-
-    public String getImagePath() {
-        return ImagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        ImagePath = imagePath;
     }
 
     public int getPriceId() {
@@ -120,11 +135,16 @@ public class Food {
         Title = title;
     }
 
-    public int getNumberInCart() {
-        return numberInCart;
+    public String getUpdateAt() {
+        return UpdateAt;
     }
 
-    public void setNumberInCart(int numberInCart) {
-        this.numberInCart = numberInCart;
+    public void setUpdateAt(String updateAt) {
+        UpdateAt = updateAt;
+    }
+
+    @Override
+    public String toString() {
+        return Title;
     }
 }

@@ -18,6 +18,11 @@ public class Location {
         Id = id;
     }
 
+    public Location(int id, String locations) {
+        Id = id;
+        Locations = locations;
+    }
+
     public String getLoc() {
         return Locations;
     }

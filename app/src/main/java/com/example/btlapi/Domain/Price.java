@@ -4,7 +4,10 @@ public class Price {
     private int Id;
     private String Prices;
 
-    public Price() {
+
+    public Price(int id, String prices) {
+        Id = id;
+        Prices = prices;
     }
 
     @Override
