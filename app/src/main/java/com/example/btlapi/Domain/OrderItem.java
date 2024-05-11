@@ -1,66 +1,60 @@
 package com.example.btlapi.Domain;
 
 public class OrderItem {
-    private int id;
-    private int orderId;
-    private int productId;
-    private int quantity;
-    private double price;
+    private int Id;
+    private int OrderId;
+    private double Price;
+    private int ProductId;
+    private int Quantity;
 
     public OrderItem(int id, int orderId, int productId, int quantity, double price) {
-        this.id = id;
-        this.orderId = orderId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.price = price;
+        this.Id = id;
+        this.OrderId = orderId;
+        this.ProductId = productId;
+        this.Quantity = quantity;
+        this.Price = price;
     }
 
-    public OrderItem(int orderId, int productId, int quantity, double price) {
-        this.orderId = orderId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.price = price;
-    }
 
     // Getters and setters
     public int getId() {
-        return id;
+        return Id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.Id = id;
     }
 
     public int getOrderId() {
-        return orderId;
+        return OrderId;
     }
 
     public void setOrderId(int orderId) {
-        this.orderId = orderId;
+        this.OrderId = orderId;
     }
 
     public int getProductId() {
-        return productId;
+        return ProductId;
     }
 
     public void setProductId(int productId) {
-        this.productId = productId;
+        this.ProductId = productId;
     }
 
     public int getQuantity() {
-        return quantity;
+        return Quantity;
     }
 
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        this.Quantity = quantity;
     }
 
     public double getPrice() {
-        return price;
+        return Price;
     }
 
     public void setPrice(double price) {
-        this.price = price;
+        this.Price = price;
     }
 }
 

@@ -10,14 +10,13 @@ public class IntroActivity extends BaseActivity {
     ActivityIntroBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         binding= ActivityIntroBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        super.onCreate(savedInstanceState);
         setVariable();
     }
 
     private void setVariable() {
-
         binding.LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -75,53 +75,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void initData() {
-        executorService.execute(new LocationTask());
+        initLocation();
+        initTime();
+        initPrice();
+        initBestFood();
+        initCategory();
     }
-
-    private class LocationTask implements Runnable {
-        @Override
-        public void run() {
-            initLocation(new Runnable() {
-                @Override
-                public void run() {
-                    initTime(new Runnable() {
-                        @Override
-                        public void run() {
-                            initPrice(new Runnable() {
-                                @Override
-                                public void run() {
-                                    initBestFood(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            initCategory(new Runnable(){
-                                                @Override
-                                                public void run() {
-
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-
-
 
     private void evenListener() {
         binding.locationSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 locationChange = locations.get(position).getId();
-                if (locationChange != -1) {
                     reloadFood();
-                }
-
             }
 
             @Override
@@ -134,9 +100,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 timeChange = times.get(position).getId();
-                if (timeChange != -1) {
                     reloadFood();
-                }
             }
 
             @Override
@@ -149,9 +113,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 priceChange = prices.get(position).getId();
-                if (priceChange != -1) {
                     reloadFood();
-                }
             }
 
             @Override
@@ -173,14 +135,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int userId=GlobalVariable.userId;
                 Intent intent=new Intent(MainActivity.this,CartActivity.class);
-                intent.putExtra("userid",userId);
                 startActivity(intent);
             }
         });
     }
 
-
-    private void initLocation(final Runnable callback) {
+    private void initLocation() {
         LocationInterface location;
         location = utils.getLocationService();
         location.getAllLocations().enqueue(new Callback<ArrayList<Location>>() {
@@ -198,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(MainActivity.this, "No response for locations", Toast.LENGTH_SHORT).show();
                 }
-                callback.run(); // Gọi callback khi hoàn thành
+                //callback.run(); // Gọi callback khi hoàn thành
             }
 
             @Override
@@ -209,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initTime(final Runnable callback) {
+    private void initTime() {
         TimeInterface time;
         time = utils.getTimeService();
         time.getAllTimes().enqueue(new Callback<ArrayList<Time>>() {
@@ -228,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(MainActivity.this, "No response for times", Toast.LENGTH_SHORT).show();
                 }
-                callback.run(); // Gọi callback khi hoàn thành
+                //callback.run(); // Gọi callback khi hoàn thành
             }
             @Override
             public void onFailure(Call<ArrayList<Time>> call, Throwable t) {
@@ -237,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initPrice(final Runnable callback) {
+    private void initPrice() {
         PriceInterface price;
         price = utils.getPriceService();
         price.getAllPrices().enqueue(new Callback<ArrayList<Price>>() {
@@ -257,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(MainActivity.this, "No response for prices", Toast.LENGTH_SHORT).show();
                 }
-                callback.run(); // Gọi callback khi hoàn thành
+                //callback.run(); // Gọi callback khi hoàn thành
             }
 
             @Override
@@ -267,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initBestFood(final Runnable callback) {
+    private void initBestFood() {
         binding.progressBarBestFood.setVisibility(View.VISIBLE);
         FoodInterface foodInterface;
         foodInterface = utils.getFoodService();
@@ -293,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "No response for best food", Toast.LENGTH_SHORT).show();
                             binding.progressBarBestFood.setVisibility(View.GONE);
                         }
-                        callback.run(); // Gọi callback khi hoàn thành
+                       // callback.run(); // Gọi callback khi hoàn thành
                     }
 
                     @Override
@@ -304,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void initCategory(final Runnable callback) {
+    private void initCategory() {
         binding.progressBarCategory.setVisibility(View.VISIBLE);
         CategoryInterface categoryInterface;
         categoryInterface = utils.getCategoryService();
@@ -329,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "No response for best food", Toast.LENGTH_SHORT).show();
                             binding.progressBarCategory.setVisibility(View.GONE);
                         }
-                        callback.run(); // Gọi callback khi hoàn thành
+                        //callback.run(); // Gọi callback khi hoàn thành
 
                     }
 

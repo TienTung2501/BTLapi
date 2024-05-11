@@ -64,7 +64,6 @@ public class CartActivity extends AppCompatActivity {
     }
     private void getIntentExtra() {
         Intent intent = getIntent();
-        userId =  intent.getIntExtra("userid",-1);
     }
     private void setVariable(){
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +114,6 @@ public class CartActivity extends AppCompatActivity {
 
                 }
             }
-
             @Override
             public void onFailure(Call<Food> call, Throwable t) {
                 // Xử lý lỗi khi gọi API

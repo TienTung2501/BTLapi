@@ -5,86 +5,69 @@ import java.util.Date;
 import java.util.List;
 
 public class Order {
-    private int id;
-    private int userId;
-    private Date orderDate;
-    private String paymentStatus;
-    private String orderStatus;
-    private double totalPrice;
-    private List<OrderItem> orderItems;
+    private int Id;
+    private Date OrderDate;
+    private String OrderStatus;
+    private String PaymentStatus;
+    private double TotalPrice;
+    private int UserId;
 
     public Order(int id, int userId, Date orderDate, String paymentStatus, String orderStatus, double totalPrice) {
-        this.id = id;
-        this.userId = userId;
-        this.orderDate = orderDate;
-        this.paymentStatus = paymentStatus;
-        this.orderStatus = orderStatus;
-        this.totalPrice = totalPrice;
-        this.orderItems = new ArrayList<>();
+        this.Id = id;
+        this.UserId = userId;
+        this.OrderDate = orderDate;
+        this.PaymentStatus = paymentStatus;
+        this.OrderStatus = orderStatus;
+        this.TotalPrice = totalPrice;
     }
 
     // Getters and setters
     public int getId() {
-        return id;
+        return Id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.Id = id;
     }
 
     public int getUserId() {
-        return userId;
+        return UserId;
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.UserId = userId;
     }
 
     public Date getOrderDate() {
-        return orderDate;
+        return OrderDate;
     }
 
     public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+        this.OrderDate = orderDate;
     }
 
     public String getPaymentStatus() {
-        return paymentStatus;
+        return PaymentStatus;
     }
 
     public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
+        this.PaymentStatus = paymentStatus;
     }
 
     public String getOrderStatus() {
-        return orderStatus;
+        return OrderStatus;
     }
 
     public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
+        this.OrderStatus = orderStatus;
     }
 
     public double getTotalPrice() {
-        return totalPrice;
+        return TotalPrice;
     }
 
     public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+        this.TotalPrice = totalPrice;
     }
 
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    public void addOrderItem(OrderItem orderItem) {
-        this.orderItems.add(orderItem);
-    }
-
-    public void removeOrderItem(OrderItem orderItem) {
-        this.orderItems.remove(orderItem);
-    }
 }

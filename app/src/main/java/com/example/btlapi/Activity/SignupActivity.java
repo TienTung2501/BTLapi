@@ -1,5 +1,6 @@
 package com.example.btlapi.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class SignupActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             if(response.isSuccessful()){
+                                startActivity(new Intent(SignupActivity.this,MainActivity.class));
                                 Toast.makeText(SignupActivity.this,"Thanh Cong",Toast.LENGTH_SHORT);
                             }
                             else

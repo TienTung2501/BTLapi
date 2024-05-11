@@ -1,19 +1,11 @@
 package com.example.btlapi.Domain;
 
 public class User {
+    private String Addresss;
     private int Id;
+    private String Mobile;
     private String Names;
     private String Passwords;
-    private String Mobile;
-    private String Addresss;
-
-    public User(int id, String names, String passwords, String mobile, String addresss) {
-        Id = id;
-        Names = names;
-        Passwords = passwords;
-        Mobile = mobile;
-        Addresss = addresss;
-    }
 
     public User(String names, String passwords, String mobile, String addresss) {
         Names = names;
@@ -21,6 +13,7 @@ public class User {
         Mobile = mobile;
         Addresss = addresss;
     }
+
 
     public int getId() {
         return Id;
