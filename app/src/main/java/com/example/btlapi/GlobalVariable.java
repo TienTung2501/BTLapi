@@ -7,7 +7,7 @@ import com.example.btlapi.Domain.OrderItem;
 import java.util.ArrayList;
 
 public class GlobalVariable {
-    public static final String baseUrl="http://192.168.0.104:333";
+    public static final String baseUrl="http://192.168.0.102:333";
     public static int userId=-1;
     public static String userName="";
     public static String phone="";

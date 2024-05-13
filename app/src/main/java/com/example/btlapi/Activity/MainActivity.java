@@ -138,6 +138,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        binding.viewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,CartActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initLocation() {

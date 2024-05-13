@@ -4,6 +4,11 @@ public class CategorySp {
     private int Id;
     private String Names;
 
+    public CategorySp(int id, String names) {
+        Id = id;
+        Names = names;
+    }
+
     public int getId() {
         return Id;
     }
@@ -12,12 +17,8 @@ public class CategorySp {
         return Names;
     }
 
-    public void setId(int id) {
-        Id = id;
-    }
-
-    public CategorySp(int id, String names) {
-        Id = id;
-        Names = names;
+    @Override
+    public String toString() {
+        return Names;
     }
 }

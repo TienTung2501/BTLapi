@@ -17,11 +17,8 @@ public class Star {
         return Stars;
     }
 
-    public void setId(int id) {
-        Id = id;
-    }
-
-    public void setStars(String stars) {
-        Stars = stars;
+    @Override
+    public String toString() {
+        return Stars;
     }
 }

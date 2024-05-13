@@ -63,7 +63,7 @@ public class ListFoodAdapter extends RecyclerView.Adapter<ListFoodAdapter.viewho
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return items.size()!=0?items.size():0;
     }
 
     public class viewholder extends RecyclerView.ViewHolder{

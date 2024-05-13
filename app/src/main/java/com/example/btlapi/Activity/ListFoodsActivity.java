@@ -189,11 +189,7 @@ public class ListFoodsActivity extends AppCompatActivity {
                         ArrayAdapter<Location> locationAdapter = new ArrayAdapter<>(ListFoodsActivity.this, R.layout.sp_item, locations);
                         locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         binding.locationSp.setAdapter(locationAdapter);
-                    } else {
-                        Toast.makeText(ListFoodsActivity.this, "No response for locations", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(ListFoodsActivity.this, "No response for locations", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -218,11 +214,7 @@ public class ListFoodsActivity extends AppCompatActivity {
                         ArrayAdapter<Time> timeAdapter = new ArrayAdapter<>(ListFoodsActivity.this, R.layout.sp_item, times);
                         timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         binding.timeSp.setAdapter(timeAdapter);
-                    } else {
-                        Toast.makeText(ListFoodsActivity.this, "No response for times", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(ListFoodsActivity.this, "No response for times", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -246,11 +238,7 @@ public class ListFoodsActivity extends AppCompatActivity {
                         priceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         binding.priceSp.setAdapter(priceAdapter);
                         // Continue to fetch prices for the next time
-                    } else {
-                        Toast.makeText(ListFoodsActivity.this, "No response for prices", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(ListFoodsActivity.this, "No response for prices", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -263,7 +251,6 @@ public class ListFoodsActivity extends AppCompatActivity {
     private void initCategory() {
         CategoryInterface categoryInterface;
         categoryInterface = utils.getCategoryService();
-        // Gửi yêu cầu với dữ liệu JSON
         categoryInterface.getAllCategories()
                 .enqueue(new Callback<ArrayList<Category>>() {
                     @Override
@@ -276,15 +263,11 @@ public class ListFoodsActivity extends AppCompatActivity {
                                 }
                                 ArrayAdapter<CategorySp> adapterCategory = new ArrayAdapter<>(ListFoodsActivity.this,R.layout.sp_item,categories);
                                 adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                adapterCategory.notifyDataSetChanged();
                                 binding.categorySp.setAdapter(adapterCategory);
 
-                            } else {
-                                Toast.makeText(ListFoodsActivity.this, "No response for best food", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(ListFoodsActivity.this, "No response for best food", Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
                     @Override
@@ -301,16 +284,15 @@ public class ListFoodsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ArrayList<Star>> call, Response<ArrayList<Star>> response) {
                 if (response.isSuccessful()) {
-                    stars.addAll(response.body());
-                    if (stars != null && !stars.isEmpty()) {
-                        ArrayAdapter<Star> starArrayAdapter = new ArrayAdapter<>(ListFoodsActivity.this, R.layout.sp_item, stars);
-                        starArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        binding.starSp.setAdapter(starArrayAdapter);
-                    } else {
-                        Toast.makeText(ListFoodsActivity.this, "No response for locations", Toast.LENGTH_SHORT).show();
+                    ArrayList<Star> result = response.body();
+                    if (result != null && !result.isEmpty()) {
+                        stars.addAll(result);
+                        ArrayAdapter<Star> adapterStar = new ArrayAdapter<>(ListFoodsActivity.this,R.layout.sp_item,stars);
+                        adapterStar.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        adapterStar.notifyDataSetChanged();
+                        binding.starSp.setAdapter(adapterStar);
+
                     }
-                } else {
-                    Toast.makeText(ListFoodsActivity.this, "No response for locations", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -319,7 +301,6 @@ public class ListFoodsActivity extends AppCompatActivity {
                 Toast.makeText(ListFoodsActivity.this, "Failed to fetch locations", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
     private void initListFoods() {
         binding.progressBar.setVisibility(View.VISIBLE);
@@ -336,9 +317,15 @@ public class ListFoodsActivity extends AppCompatActivity {
                                 adapterListFood = new ListFoodAdapter(listFoods);
                                 binding.foodListView.setAdapter(adapterListFood);
                                 binding.progressBar.setVisibility(View.GONE);
-                            } else {
-                                Toast.makeText(ListFoodsActivity.this, "No data available", Toast.LENGTH_SHORT).show();
                             }
+                            else {
+                                // Nếu danh sách rỗng, hiển thị thông báo
+                                listFoods.clear();
+                                adapterListFood.notifyDataSetChanged();
+                                Toast.makeText(ListFoodsActivity.this, "This food is over, please choose other filter", Toast.LENGTH_SHORT).show();
+                                binding.progressBar.setVisibility(View.GONE);
+                            }
+
                         } else {
                             Toast.makeText(ListFoodsActivity.this, "Request failed", Toast.LENGTH_SHORT).show();
                         }
@@ -353,7 +340,7 @@ public class ListFoodsActivity extends AppCompatActivity {
     private void reloadFood() {
         FoodInterface foodInterface;
         foodInterface = utils.getFoodService();
-        foodInterface.getFood(null, locationChange == -1 ? null : locationChange, timeChange == -1 ? null : timeChange, priceChange == -1 ? null : priceChange, starChange==-1?null:starChange, categoryChange==-1?null:categoryChange, searchTextChange==""?null:searchTextChange)
+        foodInterface.getFood(null, locationChange == -1 ? null : locationChange, timeChange == -1 ? null : timeChange, priceChange == -1 ? null : priceChange, starChange == -1 ? null : starChange, categoryChange == -1 ? null : categoryChange, searchTextChange == "" ? null : searchTextChange)
                 .enqueue(new Callback<ArrayList<Food>>() {
                     @SuppressLint("NotifyDataSetChanged")
                     @Override
@@ -361,15 +348,24 @@ public class ListFoodsActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             ArrayList<Food> result = response.body();
                             if (result != null && !result.isEmpty()) {
-                                listFoods.clear(); // Xóa dữ liệu cũ
-                                listFoods.addAll(result); // Thêm dữ liệu mới từ phản hồi
-                                binding.foodListView.setLayoutManager(new GridLayoutManager(ListFoodsActivity.this, 2));
-                                adapterListFood = new ListFoodAdapter(listFoods);
-                                binding.foodListView.setAdapter(adapterListFood);
+                                listFoods.clear(); // Clear old data
+                                listFoods.addAll(result); // Add new data from the response
+                                if (adapterListFood == null) {
+                                    // Initialize adapterListFood only when it's null
+                                    adapterListFood = new ListFoodAdapter(listFoods);
+                                    binding.foodListView.setAdapter(adapterListFood);
+                                } else {
+                                    // Update existing adapter
+                                    adapterListFood.notifyDataSetChanged();
+                                }
                                 binding.progressBar.setVisibility(View.GONE);
-
                             } else {
-                                Toast.makeText(ListFoodsActivity.this, "No response for best food", Toast.LENGTH_SHORT).show();
+                                // Handle case when there are no results
+                                listFoods.clear();
+                                if (adapterListFood != null) {
+                                    adapterListFood.notifyDataSetChanged();
+                                }
+                                Toast.makeText(ListFoodsActivity.this, "This food is over, please choose other filter", Toast.LENGTH_SHORT).show();
                                 binding.progressBar.setVisibility(View.GONE);
                             }
                         } else {
@@ -386,12 +382,14 @@ public class ListFoodsActivity extends AppCompatActivity {
                 });
 
     }
+
     private void getIntentExtra() {
         categoryId = getIntent().getIntExtra("CategoryId", -1);
         categoryName = getIntent().getStringExtra("CategoryName");
         searchText = getIntent().getStringExtra("searchText");
         searchTextChange = searchText;
         categoryChange = categoryId;
+
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
