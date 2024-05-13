@@ -24,7 +24,7 @@ public interface FoodInterface {
             @Query("price") Integer price,
             @Query("star") Integer star,
             @Query("category") Integer category,
-            @Query("searchtext") String searchtext
+            @Query("searchText") String searchtext
     );
 
 

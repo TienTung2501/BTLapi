@@ -84,10 +84,8 @@ public class ListFoodsActivity extends AppCompatActivity {
         prices.add(new Price(-1, "ALL Price"));
         stars.add(new Star(-1, "ALL Star"));
         categories.add(new CategorySp(-1,"ALL Category"));
-
-        getIntentExtra();
-        initListFoods();
         initData();
+        getIntentExtra();
         evenListener();
     }
 
@@ -165,6 +163,7 @@ public class ListFoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 searchTextChange = binding.editTextText.getText().toString();
+                // Reload food data only after all changes are determined
                 reloadFood();
             }
         });
@@ -263,9 +262,16 @@ public class ListFoodsActivity extends AppCompatActivity {
                                 }
                                 ArrayAdapter<CategorySp> adapterCategory = new ArrayAdapter<>(ListFoodsActivity.this,R.layout.sp_item,categories);
                                 adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                adapterCategory.notifyDataSetChanged();
                                 binding.categorySp.setAdapter(adapterCategory);
 
+                                // Set selected category after categories list is loaded
+                                for (int i = 0; i < categories.size(); i++) {
+                                    if (categories.get(i).getId() == categoryId) {
+                                        binding.categorySp.setSelection(i);
+                                        initListFoods();
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -275,7 +281,6 @@ public class ListFoodsActivity extends AppCompatActivity {
                         Toast.makeText(ListFoodsActivity.this, "Failed to fetch best food", Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
     private void initStar() {
         StarInterface starInterface;
@@ -322,7 +327,6 @@ public class ListFoodsActivity extends AppCompatActivity {
                                 // Nếu danh sách rỗng, hiển thị thông báo
                                 listFoods.clear();
                                 adapterListFood.notifyDataSetChanged();
-                                Toast.makeText(ListFoodsActivity.this, "This food is over, please choose other filter", Toast.LENGTH_SHORT).show();
                                 binding.progressBar.setVisibility(View.GONE);
                             }
 
@@ -340,7 +344,7 @@ public class ListFoodsActivity extends AppCompatActivity {
     private void reloadFood() {
         FoodInterface foodInterface;
         foodInterface = utils.getFoodService();
-        foodInterface.getFood(null, locationChange == -1 ? null : locationChange, timeChange == -1 ? null : timeChange, priceChange == -1 ? null : priceChange, starChange == -1 ? null : starChange, categoryChange == -1 ? null : categoryChange, searchTextChange == "" ? null : searchTextChange)
+        foodInterface.getFood(null, locationChange == -1 ? null : locationChange, timeChange == -1 ? null : timeChange, priceChange == -1 ? null : priceChange, starChange == -1 ? null : starChange, categoryChange == -1 ? null : categoryChange, searchTextChange != null && !searchTextChange.isEmpty() ? searchTextChange : null)
                 .enqueue(new Callback<ArrayList<Food>>() {
                     @SuppressLint("NotifyDataSetChanged")
                     @Override
@@ -365,11 +369,9 @@ public class ListFoodsActivity extends AppCompatActivity {
                                 if (adapterListFood != null) {
                                     adapterListFood.notifyDataSetChanged();
                                 }
-                                Toast.makeText(ListFoodsActivity.this, "This food is over, please choose other filter", Toast.LENGTH_SHORT).show();
                                 binding.progressBar.setVisibility(View.GONE);
                             }
                         } else {
-                            Toast.makeText(ListFoodsActivity.this, "No response for best food", Toast.LENGTH_SHORT).show();
                             binding.progressBar.setVisibility(View.GONE);
                         }
                     }
@@ -383,13 +385,14 @@ public class ListFoodsActivity extends AppCompatActivity {
 
     }
 
+
+
     private void getIntentExtra() {
         categoryId = getIntent().getIntExtra("CategoryId", -1);
         categoryName = getIntent().getStringExtra("CategoryName");
         searchText = getIntent().getStringExtra("searchText");
         searchTextChange = searchText;
         categoryChange = categoryId;
-
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         binding.viewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,CartActivity.class);
+                Intent intent=new Intent(MainActivity.this,ListFoodsActivity.class);
                 startActivity(intent);
             }
         });
