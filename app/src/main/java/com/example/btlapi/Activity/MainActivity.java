@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         categories = new ArrayList<>();
         bestFoods = new ArrayList<>();
         initData();
+        binding.userNameTxt.setText(GlobalVariable.userName);
         evenListener();
 
     }
@@ -142,6 +143,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this,ListFoodsActivity.class);
+                startActivity(intent);
+            }
+        });
+        binding.userNameTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,AccountActivity.class);
                 startActivity(intent);
             }
         });

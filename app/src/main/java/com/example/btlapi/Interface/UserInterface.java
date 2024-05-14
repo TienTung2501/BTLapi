@@ -13,4 +13,6 @@ public interface UserInterface {
     Call<User> getUser(@Query("Mobile") String Mobile, @Query("Passwords") String Passwords);
     @POST("/user/insert")
     Call<User> insertUser(@Body User user);
+    @POST("/user/update")
+    Call<User> updateUser(@Body User user);
 }

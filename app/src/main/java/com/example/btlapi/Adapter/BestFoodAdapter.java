@@ -1,5 +1,6 @@
 package com.example.btlapi.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -38,7 +39,7 @@ public class BestFoodAdapter extends RecyclerView.Adapter<BestFoodAdapter.viewho
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BestFoodAdapter.viewholder holder, int position) {
+    public void onBindViewHolder(@NonNull BestFoodAdapter.viewholder holder, @SuppressLint("RecyclerView") int position) {
         holder.titleTxt.setText(items.get(position).getTitle());
         holder.priceTxt.setText("$"+items.get(position).getPrice());
         holder.starTxt.setText(String.valueOf(items.get(position).getStar()));

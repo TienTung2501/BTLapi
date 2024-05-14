@@ -12,7 +12,9 @@ public class GlobalVariable {
     public static String userName="";
     public static String phone="";
     public static String email="";
+    public static String imagePath="";
     public static boolean islogin=false;
+    public static String password="";
     public static ArrayList<OrderItem> listOrderItem=new ArrayList<>();
     public static ArrayList<Order> listOrder=new ArrayList<>();
     public static ArrayList<Food> listFood=new ArrayList<>();

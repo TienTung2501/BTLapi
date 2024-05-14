@@ -176,10 +176,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
             super(itemView);
             title = itemView.findViewById(R.id.cartTxt);
             pic = itemView.findViewById(R.id.pic);
-            feeEachItem = itemView.findViewById(R.id.feeEachItem);
+            feeEachItem = itemView.findViewById(R.id.totalPriceTxt);
             plusItem = itemView.findViewById(R.id.plusCartBtn);
             minusItem = itemView.findViewById(R.id.minusCartBtn);
-            totalEachItem = itemView.findViewById(R.id.totalEachItem);
+            totalEachItem = itemView.findViewById(R.id.singlePriceTxt);
             num = itemView.findViewById(R.id.numberItemTxt);
             // Lấy resources từ context
             Resources resources = context.getResources();

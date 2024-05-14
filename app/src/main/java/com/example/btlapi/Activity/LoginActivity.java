@@ -74,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
                                         GlobalVariable.userName = result.getNames();
                                         GlobalVariable.phone = result.getMobile();
                                         GlobalVariable.email = result.getAddresss();
+                                        GlobalVariable.imagePath=result.getImagePath();
+                                        GlobalVariable.password=result.getPasswords();
                                         int userId=result.getId();
                                         initOrder(userId);
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
