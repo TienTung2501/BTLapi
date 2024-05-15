@@ -55,7 +55,7 @@ public class SignupActivity extends AppCompatActivity {
                 else{
                     UserInterface userInterface;
                     userInterface = utils.getUserService();
-                    User user = new User(0,name,password,phone,address,"");
+                    User user = new User(0,name,password,phone,address,"image");
                     userInterface.insertUser(user).enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
@@ -73,7 +73,7 @@ public class SignupActivity extends AppCompatActivity {
                                     List<OrderItem> item1 = new ArrayList<>();
                                     OrderItemManager.saveOrderItems(SignupActivity.this,GlobalVariable.userId,item1);
                                 }
-                                startActivity(new Intent(SignupActivity.this,MainActivity.class));
+                                startActivity(new Intent(SignupActivity.this,LoginActivity.class));
                                 Toast.makeText(SignupActivity.this,"Đăng kí Thanh Cong",Toast.LENGTH_SHORT).show();
                             }
                             else
