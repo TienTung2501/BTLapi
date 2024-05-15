@@ -14,16 +14,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.btlapi.Domain.OrderItem;
+import com.example.btlapi.Domain.OrderItemDisplay;
 import com.example.btlapi.R;
 
 import java.util.ArrayList;
 
 public class ListOrderDetailAdapter extends RecyclerView.Adapter<ListOrderDetailAdapter.Viewholder> {
 
-    ArrayList<OrderItem> items;
+    ArrayList<OrderItemDisplay> items;
     Context context;
 
-    public ListOrderDetailAdapter(ArrayList<OrderItem> items) {
+    public ListOrderDetailAdapter(ArrayList<OrderItemDisplay> items) {
         this.items = items;
     }
 
@@ -40,19 +41,19 @@ public class ListOrderDetailAdapter extends RecyclerView.Adapter<ListOrderDetail
     public void onBindViewHolder(@NonNull ListOrderDetailAdapter.Viewholder holder, int position) {
         int quantity=items.get(position).getQuantity();
         double price=items.get(position).getPrice();
-        holder.titleTxt.setText(String.valueOf(items.get(position).getProductId()));
+        holder.titleTxt.setText(String.valueOf(items.get(position).getTitle()));
         holder.siglePriceTxt.setText(String.valueOf(price));
         holder.quantityTxt.setText(String.valueOf(quantity));
-        holder.totalPriceTxt.setText(String.valueOf(String.valueOf(quantity*price)));
-//        int imageResourceId = getImageResource(items.get(position).getImagePath());
-//        if (imageResourceId != 0) {
-//            Glide.with(context)
-//                    .load(imageResourceId)
-//                    .transform(new CenterCrop(), new RoundedCorners(30))
-//                    .into(holder.pic);
-//        } else {
-//            holder.pic.setImageResource(R.drawable.google);
-//        }
+        holder.totalPriceTxt.setText(String.valueOf(String.valueOf(items.get(position).getTotalPrice())));
+        int imageResourceId = getImageResource(items.get(position).getImagePath());
+        if (imageResourceId != 0) {
+            Glide.with(context)
+                    .load(imageResourceId)
+                    .transform(new CenterCrop(), new RoundedCorners(30))
+                    .into(holder.pic);
+        } else {
+            holder.pic.setImageResource(R.drawable.google);
+        }
 
     }
 

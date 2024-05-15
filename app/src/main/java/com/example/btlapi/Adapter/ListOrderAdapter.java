@@ -11,11 +11,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.btlapi.Activity.DetailActivity;
 import com.example.btlapi.Activity.OrderDetailActivity;
 import com.example.btlapi.Domain.Order;
 import com.example.btlapi.R;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ListOrderAdapter extends RecyclerView.Adapter<ListOrderAdapter.ViewHolder> {
     ArrayList<Order> items;
@@ -36,15 +40,17 @@ public class ListOrderAdapter extends RecyclerView.Adapter<ListOrderAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ListOrderAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.orderIdTxt.setText(items.get(position).getId());
-        holder.orderDateTxt.setText(String.valueOf(items.get(position).getOrderDate()));
-        holder.totalPriceTxt.setText(String.valueOf(items.get(position).getTotalPrice()));
+        holder.orderIdTxt.setText(String.valueOf(items.get(position).getId()));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        String formattedDate = sdf.format(items.get(position).getOrderDate());
+        holder.orderDateTxt.setText(formattedDate);
+        holder.totalPriceTxt.setText(String.valueOf(items.get(position).getTotalPrice())+"$");
         holder.paymentTxt.setText(items.get(position).getPaymentStatus());
         holder.detalTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context, OrderDetailActivity.class);
-                intent.putExtra("orderid",items.get(position).getId());
+                intent.putExtra("object", (Serializable) items.get(position));
                 context.startActivity(intent);
             }
         });

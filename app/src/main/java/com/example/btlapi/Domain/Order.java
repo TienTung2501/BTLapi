@@ -1,10 +1,11 @@
 package com.example.btlapi.Domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Order {
+public class Order implements Serializable {
     private int Id;
     private Date OrderDate;
     private String OrderStatus;

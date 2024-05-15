@@ -7,12 +7,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.btlapi.Domain.Food;
+import com.example.btlapi.Domain.OrderItem;
 import com.example.btlapi.Domain.User;
+import com.example.btlapi.GlobalVariable;
+import com.example.btlapi.Interface.FoodInterface;
+import com.example.btlapi.OrderItemManager;
 import com.example.btlapi.Utils.utils;
 import com.example.btlapi.Utils.utils.*;
 import com.example.btlapi.Interface.UserInterface;
 import com.example.btlapi.R;
 import com.example.btlapi.databinding.ActivitySignupBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.internal.Util;
 import retrofit2.Call;
@@ -52,6 +60,19 @@ public class SignupActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             if(response.isSuccessful()){
+                                GlobalVariable.islogin = true;
+                                GlobalVariable.userId = user.getId();
+                                GlobalVariable.userName = user.getNames();
+                                GlobalVariable.phone = user.getMobile();
+                                GlobalVariable.email = user.getAddresss();
+                                GlobalVariable.imagePath=user.getImagePath();
+                                GlobalVariable.password=user.getPasswords();
+                                GlobalVariable.address=user.getAddresss();
+                                initListFoods();
+                                if (!OrderItemManager.findOrderUser(SignupActivity.this,GlobalVariable.userId)){
+                                    List<OrderItem> item1 = new ArrayList<>();
+                                    OrderItemManager.saveOrderItems(SignupActivity.this,GlobalVariable.userId,item1);
+                                }
                                 startActivity(new Intent(SignupActivity.this,MainActivity.class));
                                 Toast.makeText(SignupActivity.this,"Thanh Cong",Toast.LENGTH_SHORT);
                             }
@@ -67,7 +88,29 @@ public class SignupActivity extends AppCompatActivity {
                 }
 
 
+
             }
         });
+
+    }
+    private void initListFoods() {
+        FoodInterface foodInterface = utils.getFoodService();
+        foodInterface.getFood(null, null, null, null, null, null, null)
+                .enqueue(new Callback<ArrayList<Food>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Food>> call, Response<ArrayList<Food>> response) {
+                        if (response.isSuccessful()) {
+                            ArrayList<Food> result = new ArrayList<>(response.body());
+                            if (result != null && !result.isEmpty()) {
+                                GlobalVariable.listFood.addAll(result);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Food>> call, Throwable t) {
+
+                    }
+                });
     }
 }

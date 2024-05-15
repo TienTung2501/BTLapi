@@ -115,7 +115,7 @@ public class ProfileDetailActivity extends AppCompatActivity {
                     GlobalVariable.userName = result.getNames();
                     GlobalVariable.phone = result.getMobile();
                     GlobalVariable.email = result.getAddresss();
-                    GlobalVariable.imagePath=result.getImagePath();
+                    GlobalVariable.imagePath=result.getImagePath()==null?"image":result.getImagePath();
                     GlobalVariable.password=result.getPasswords();
                     GlobalVariable.address=result.getAddresss();
                     startActivity(new Intent(ProfileDetailActivity.this,AccountActivity.class));

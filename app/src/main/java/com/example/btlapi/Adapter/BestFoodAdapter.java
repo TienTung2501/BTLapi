@@ -109,7 +109,7 @@ public class BestFoodAdapter extends RecyclerView.Adapter<BestFoodAdapter.viewho
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
-            titleTxt=itemView.findViewById(R.id.cartTxt);
+            titleTxt=itemView.findViewById(R.id.titleTxt);
             priceTxt=itemView.findViewById(R.id.priceTxt);
             starTxt=itemView.findViewById(R.id.starTxt);
             timeTxt=itemView.findViewById(R.id.timeTxt);

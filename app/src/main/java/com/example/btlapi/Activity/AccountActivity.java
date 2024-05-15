@@ -61,21 +61,37 @@ public class AccountActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        binding.backTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(AccountActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
     private int getImageResource(String imageName) {
         return getResources().getIdentifier(imageName, "drawable", getPackageName());
     }
     private void loadInfo(){
-        binding.userNameTxt.setText(GlobalVariable.userName);
-        int imageResourceId = getImageResource(GlobalVariable.imagePath);
+        if (GlobalVariable.userName != null) {
+            binding.userNameTxt.setText(GlobalVariable.userName);
+        }
+        if (GlobalVariable.imagePath != null) {
+            int imageResourceId = getImageResource(GlobalVariable.imagePath);
 
-        if (imageResourceId != 0) {
-            Glide.with(AccountActivity.this)
-                    .load(imageResourceId)
-                    .transform(new CenterCrop(), new RoundedCorners(30))
-                    .into(binding.picAvatar);
-        } else {
+            if (imageResourceId != 0) {
+                Glide.with(AccountActivity.this)
+                        .load(imageResourceId)
+                        .transform(new CenterCrop(), new RoundedCorners(30))
+                        .into(binding.picAvatar);
+            } else {
+                binding.picAvatar.setImageResource(R.drawable.google);
+            }
+
+        }
+        else {
             binding.picAvatar.setImageResource(R.drawable.google);
         }
     }
+
 }
