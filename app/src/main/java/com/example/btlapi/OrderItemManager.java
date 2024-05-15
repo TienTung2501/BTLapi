@@ -7,6 +7,7 @@ import com.example.btlapi.Domain.OrderItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class OrderItemManager {
         // Lưu OrderItem mới vào SharedPreferences
         saveOrderItems(context, userId, orderItem);
     }
-//    public static void updateOrderItemQuantity(Context context, int userId,OrderItem orderItemId, int productId, int quantity) {
+    //    public static void updateOrderItemQuantity(Context context, int userId,OrderItem orderItemId, int productId, int quantity) {
 //        // Kiểm tra xem OrderItem đã tồn tại cho người dùng này chưa
 //        if (orderItemMap.containsKey(userId)) {
 //            // Lấy OrderItem tương ứng từ bộ nhớ đệm
@@ -62,14 +63,18 @@ public class OrderItemManager {
         }
     }
     public static void clearOrderItems(Context context, int userId) {
-        // Xóa OrderItem khỏi bộ nhớ đệm
-        orderItemMap.remove(userId);
+        // Làm trống danh sách OrderItem trong bộ nhớ đệm
+        orderItemMap.put(userId, new ArrayList<>());
 
         // Lấy SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
-        // Xóa OrderItem khỏi SharedPreferences
-        sharedPreferences.edit().remove(String.valueOf(userId)).apply();
+        // Chuyển đổi danh sách OrderItem trống thành chuỗi JSON
+        Gson gson = new Gson();
+        String emptyOrderItemsJson = gson.toJson(new ArrayList<OrderItem>());
+
+        // Lưu chuỗi JSON trống vào SharedPreferences với key là userId
+        sharedPreferences.edit().putString(String.valueOf(userId), emptyOrderItemsJson).apply();
     }
 
     public static void saveOrderItems(Context context, int userId, List<OrderItem> orderItems) {

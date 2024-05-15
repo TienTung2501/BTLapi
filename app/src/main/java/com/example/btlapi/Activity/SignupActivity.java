@@ -38,7 +38,7 @@ public class SignupActivity extends AppCompatActivity {
 
         setVariable();
     }
-//binding.backBtn.setOnClickListener(v -> finish());
+    //binding.backBtn.setOnClickListener(v -> finish());
     private void setVariable() {
         binding.textViewLogin.setOnClickListener(v -> finish());
         binding.signupBtn.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +55,7 @@ public class SignupActivity extends AppCompatActivity {
                 else{
                     UserInterface userInterface;
                     userInterface = utils.getUserService();
-                    User user = new User(name,password,phone,address);
+                    User user = new User(0,name,password,phone,address,"");
                     userInterface.insertUser(user).enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
@@ -74,15 +74,15 @@ public class SignupActivity extends AppCompatActivity {
                                     OrderItemManager.saveOrderItems(SignupActivity.this,GlobalVariable.userId,item1);
                                 }
                                 startActivity(new Intent(SignupActivity.this,MainActivity.class));
-                                Toast.makeText(SignupActivity.this,"Thanh Cong",Toast.LENGTH_SHORT);
+                                Toast.makeText(SignupActivity.this,"Đăng kí Thanh Cong",Toast.LENGTH_SHORT).show();
                             }
                             else
-                                Toast.makeText(SignupActivity.this,"Hello",Toast.LENGTH_SHORT);
+                                Toast.makeText(SignupActivity.this,"Đăng Kí thất bại",Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            Toast.makeText(SignupActivity.this,"Loi",Toast.LENGTH_SHORT);
+                            Toast.makeText(SignupActivity.this,"Đăng Kí thất bại",Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

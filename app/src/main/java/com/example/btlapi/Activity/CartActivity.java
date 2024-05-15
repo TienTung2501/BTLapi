@@ -141,7 +141,7 @@ public class CartActivity extends AppCompatActivity {
                     if (result != null && !result.isEmpty()) {
 //                        GlobalVariable.listOrder.addAll(result);
                         for (OrderItem x: listItemInsert){
-                            OrderItemRequest itemInsert = new OrderItemRequest(String.valueOf(result.get(0).getId()),String.valueOf(x.getProductId()),String.valueOf(x.getPrice()),String.valueOf(x.getQuantity()));
+                            OrderItemRequest itemInsert = new OrderItemRequest(String.valueOf(result.get(result.size()-1).getId()),String.valueOf(x.getProductId()),String.valueOf(x.getPrice()),String.valueOf(x.getQuantity()));
                             System.out.println("Test Order ID : "+itemInsert.getOrderId());
                             insertOrderItem(itemInsert);
                         }
