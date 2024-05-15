@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,10 +18,14 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.btlapi.Activity.DetailActivity;
 import com.example.btlapi.Domain.Food;
+import com.example.btlapi.Domain.OrderItem;
+import com.example.btlapi.GlobalVariable;
+import com.example.btlapi.OrderItemManager;
 import com.example.btlapi.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BestFoodAdapter extends RecyclerView.Adapter<BestFoodAdapter.viewholder> {
 
@@ -64,6 +69,31 @@ public class BestFoodAdapter extends RecyclerView.Adapter<BestFoodAdapter.viewho
                 context.startActivity(intent);
             }
         });
+        holder.plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<OrderItem> orderItemList = OrderItemManager.getOrderItems(context, GlobalVariable.userId);
+                if (!orderItemList.isEmpty()){
+                    for (OrderItem x : orderItemList) {
+                        if (x.getProductId() == items.get(position).getId()) {
+                            //System.out.println("Food:  " + x.getProductId());
+                            int quantity = x.getQuantity() + 1;
+                            double total = quantity * items.get(position).getPrice();
+                            x.setQuantity(quantity);
+                            x.setPrice(total);
+                            OrderItemManager.editOrderItems(context, GlobalVariable.userId, orderItemList);
+                            Toast.makeText(context,"Thêm vào giỏ hàng thành công",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                }
+                //System.out.println("Food111:  " + object.getId());
+                OrderItem item1 = new OrderItem(items.get(position).getId(),1,items.get(position).getPrice());
+                orderItemList.add(item1);
+                OrderItemManager.addNewOrderItem(context,GlobalVariable.userId,orderItemList);
+                Toast.makeText(context,"Thêm vào giỏ hàng thành công ",Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -73,8 +103,9 @@ public class BestFoodAdapter extends RecyclerView.Adapter<BestFoodAdapter.viewho
     }
 
     public class viewholder extends RecyclerView.ViewHolder{
-        TextView titleTxt,priceTxt,starTxt,timeTxt;
+        TextView titleTxt,priceTxt,starTxt,timeTxt,plus;
         ImageView pic;
+
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +114,7 @@ public class BestFoodAdapter extends RecyclerView.Adapter<BestFoodAdapter.viewho
             starTxt=itemView.findViewById(R.id.starTxt);
             timeTxt=itemView.findViewById(R.id.timeTxt);
             pic=itemView.findViewById(R.id.pic);
+            plus = itemView.findViewById(R.id.plusBtn);
         }
     }
     private int getImageResource(String imageName) {

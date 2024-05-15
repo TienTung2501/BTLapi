@@ -19,11 +19,13 @@ import com.example.btlapi.Interface.FoodInterface;
 import com.example.btlapi.Interface.OrderInterface;
 import com.example.btlapi.Interface.OrderItemInterface;
 import com.example.btlapi.Interface.UserInterface;
+import com.example.btlapi.OrderItemManager;
 import com.example.btlapi.R;
 import com.example.btlapi.Utils.utils;
 import com.example.btlapi.databinding.ActivityLoginBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import retrofit2.Call;
@@ -76,12 +78,19 @@ public class LoginActivity extends AppCompatActivity {
                                         GlobalVariable.email = result.getAddresss();
                                         GlobalVariable.imagePath=result.getImagePath();
                                         GlobalVariable.password=result.getPasswords();
+                                        GlobalVariable.address=result.getAddresss();
                                         int userId=result.getId();
-                                        initOrder(userId);
+                                        initListFoods();
+                                        if (!OrderItemManager.findOrderUser(LoginActivity.this,GlobalVariable.userId)){
+                                                List<OrderItem> item1 = new ArrayList<>();
+                                                OrderItemManager.saveOrderItems(LoginActivity.this,GlobalVariable.userId,item1);
+                                        }
+                                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 } else {
                                         Toast.makeText(LoginActivity.this, "No data user respone", Toast.LENGTH_SHORT).show();
                                 }
+
                         }
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {

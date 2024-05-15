@@ -45,6 +45,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:parent:2.4.0")
     implementation ("com.squareup.retrofit2:retrofit:2.4.0")
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation ("com.android.volley:volley:1.2.1")
 
 
 }

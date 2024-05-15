@@ -5,15 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.btlapi.Domain.OrderItem;
+import com.example.btlapi.GlobalVariable;
+import com.example.btlapi.OrderItemManager;
 import com.example.btlapi.R;
 import com.example.btlapi.databinding.ActivityDetailBinding;
 import com.example.btlapi.databinding.ActivityIntroBinding;
 import com.example.btlapi.Domain.Food;
 import java.security.PrivateKey;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
     ActivityDetailBinding binding;
@@ -71,7 +76,26 @@ public class DetailActivity extends AppCompatActivity {
         binding.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                List<OrderItem> orderItemList = OrderItemManager.getOrderItems(DetailActivity.this,GlobalVariable.userId);
+                if (!orderItemList.isEmpty()){
+                    for (OrderItem x : orderItemList) {
+                        if (x.getProductId() == object.getId()) {
+                            //System.out.println("Food:  " + x.getProductId());
+                            int quantity = x.getQuantity() + Integer.parseInt(binding.numTxt.getText().toString());
+                            double total = quantity * object.getPrice();
+                            x.setQuantity(quantity);
+                            x.setPrice(total);
+                            OrderItemManager.editOrderItems(DetailActivity.this, GlobalVariable.userId, orderItemList);
+                            Toast.makeText(DetailActivity.this,"Thêm vào giỏ hàng thành công",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                }
+                //System.out.println("Food111:  " + object.getId());
+                OrderItem item1 = new OrderItem(object.getId(),Integer.parseInt(binding.numTxt.getText().toString()),Double.parseDouble(binding.totalTxt.getText().toString()));
+                orderItemList.add(item1);
+                OrderItemManager.addNewOrderItem(DetailActivity.this, GlobalVariable.userId,orderItemList);
+                Toast.makeText(DetailActivity.this,"Thêm vào giỏ hàng thành công ",Toast.LENGTH_SHORT).show();
             }
         });
     }

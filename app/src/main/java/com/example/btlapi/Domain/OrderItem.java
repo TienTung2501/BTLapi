@@ -6,6 +6,12 @@ public class OrderItem {
     private double Price;
     private int ProductId;
     private int Quantity;
+    public OrderItem(int productId, int quantity, double price) {
+        Price = price;
+        ProductId = productId;
+        Quantity = quantity;
+    }
+
 
     public OrderItem(int id, int orderId, int productId, int quantity, double price) {
         this.Id = id;

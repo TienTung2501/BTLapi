@@ -11,57 +11,67 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btlapi.Adapter.CartAdapter;
-import com.example.btlapi.Domain.Food;
-import com.example.btlapi.Domain.User;
 import com.example.btlapi.GlobalVariable;
-import com.example.btlapi.Interface.FoodInterface;
+import com.example.btlapi.Interface.OrderInterface;
 import com.example.btlapi.Interface.OrderItemInterface;
-import com.example.btlapi.Interface.UserInterface;
 import com.example.btlapi.OrderItemManager;
 import com.example.btlapi.R;
 import com.example.btlapi.Domain.Order;
 import com.example.btlapi.Domain.OrderItem;
+import com.example.btlapi.Request.OrderItemRequest;
+import com.example.btlapi.Request.OrderRequest;
 import com.example.btlapi.Utils.utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.example.btlapi.OrderItemQueue;
+
 import com.example.btlapi.databinding.ActivityCartBinding;
-import com.example.btlapi.databinding.ActivityMainBinding;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 public class CartActivity extends AppCompatActivity {
     private ActivityCartBinding binding;
-    private Integer userId;
 
-    ArrayList<Order> listOrder=new ArrayList<>();
-    Food items =new Food();
-    ArrayList<OrderItem> listOrderItem = new ArrayList<OrderItem>();
-    OrderItem item,item2,item3;
     RecyclerView cardView;
+    TextView TextViewtotal;
     AppCompatButton placeOrder;
-    private OrderItemQueue orderItemQueue =new OrderItemQueue();
-    int orderID;
+    CartAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCartBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        listOrder= GlobalVariable.listOrder;
-        listOrderItem=GlobalVariable.listOrderItem;
-        cardView.setLayoutManager(new LinearLayoutManager(CartActivity.this));
-        CartAdapter adapter = new CartAdapter(CartActivity.this, listOrderItem,GlobalVariable.listFood);
-        cardView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
         getIntentExtra();
         setVariable();
         InitWiget();
+
+        cardView.setLayoutManager(new LinearLayoutManager(CartActivity.this));
+        if (!OrderItemManager.getOrderItems(this,GlobalVariable.userId).isEmpty()) {
+            ArrayList<OrderItem> item = new ArrayList<>(OrderItemManager.getOrderItems(this,GlobalVariable.userId));
+            System.out.println("Trung 123: " + OrderItemManager.getOrderItems(this,GlobalVariable.userId).get(0).getProductId());
+            adapter = new CartAdapter(CartActivity.this, item, GlobalVariable.listFood);
+            cardView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
+        placeOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<OrderItem> listItemInsert = new ArrayList<>(OrderItemManager.getOrderItems(CartActivity.this,GlobalVariable.userId));
+                if (!listItemInsert.isEmpty()){
+                    String priceString = TextViewtotal.getText().toString();
+                    String numberString = priceString.substring(1); // Bỏ qua ký tự đầu tiên là "$"
+                    double price = Double.parseDouble(numberString);
+                    OrderRequest item = new OrderRequest(String.valueOf(GlobalVariable.userId),"Processing","Pending",String.valueOf(price));
+                    insertOrder(item,listItemInsert);
+                }
+            }
+        });
     }
+
+
     private void getIntentExtra() {
         Intent intent = getIntent();
     }
@@ -73,61 +83,90 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-    private void insertOrderItem(OrderItem item){
-        OrderItemInterface orderItemInterface;
-        orderItemInterface = utils.getOrderItemService();
-        OrderItem user = new OrderItem(item.getId(),item.getOrderId(),item.getProductId(),item.getQuantity(),item.getPrice());
-        System.out.println(item.getId()+" "+item.getOrderId()+" "+item.getProductId()+" "+item.getQuantity()+" "+item.getPrice());
-        orderItemInterface.insertOrderItem(user).enqueue(new Callback<OrderItem>() {
+    private void insertOrder (OrderRequest item,ArrayList<OrderItem> listItemInsert){
+
+        OrderInterface orderInterface;
+        orderInterface = utils.getOrderService();
+        orderInterface.insertOrder(item).enqueue(new Callback<OrderRequest>() {
             @Override
-            public void onResponse(Call<OrderItem> call, Response<OrderItem> response) {
+            public void onResponse(Call<OrderRequest> call, Response<OrderRequest> response) {
                 if(response.isSuccessful()){
-                    Toast.makeText(CartActivity.this,"Thanh Cong",Toast.LENGTH_SHORT);
+                    Toast.makeText(CartActivity.this,"Thanh Cong",Toast.LENGTH_SHORT).show();
+                    initOrder(GlobalVariable.userId,listItemInsert);
                 }
-                else
-                    Toast.makeText(CartActivity.this,"Hello",Toast.LENGTH_SHORT);
+                else{
+                    Toast.makeText(CartActivity.this,"Hello",Toast.LENGTH_SHORT).show();
+                }
+
+
             }
 
             @Override
-            public void onFailure(Call<OrderItem> call, Throwable t) {
-                Toast.makeText(CartActivity.this,"Loi",Toast.LENGTH_SHORT);
+            public void onFailure(Call<OrderRequest> call, Throwable t) {
+                Toast.makeText(CartActivity.this,"Loi",Toast.LENGTH_SHORT).show();
+                System.out.println("Lỗi nặng: " + t.getMessage());
             }
         });
     }
-    public Food getfoodbyid(int id) {
-        FoodInterface foodInterface;
-        final Food[] result = new Food[1];
-        foodInterface = utils.getFoodService();
-        // Gọi phương thức getUser từ userInterface
-        foodInterface.getDetailFoodById(id).enqueue(new Callback<Food>() {
+    private void insertOrderItem(OrderItemRequest item){
+        System.out.println("Test Order item: "+item.getOrderId()+" "+item.getProductId()+" "+item.getPrice()+" "+item.getQuantity());
+        OrderItemInterface orderItemInterface;
+        orderItemInterface = utils.getOrderItemService();
+
+        orderItemInterface.insertOrderItem(item).enqueue(new Callback<OrderItemRequest>() {
             @Override
-            public void onResponse(Call<Food> call, Response<Food> response) {
+            public void onResponse(Call<OrderItemRequest> call, Response<OrderItemRequest> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(CartActivity.this,"Thanh Cong",Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(CartActivity.this,"Hello",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<OrderItemRequest> call, Throwable t) {
+                Toast.makeText(CartActivity.this,"Loi",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initOrder(int userId,ArrayList<OrderItem>listItemInsert) {
+        final int[] orderId = new int[1];
+        OrderInterface orderInterface = utils.getOrderService();
+        orderInterface.getAllOrdersByUserId(userId, "Processing").enqueue(new Callback<ArrayList<Order>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Order>> call, Response<ArrayList<Order>> response) {
                 if (response.isSuccessful()) {
-                    Food food = response.body(); // Lấy người dùng từ phản hồi
-                    if (food != null) {
-                        // Hiển thị thông tin người dùng
-//                        Toast.makeText(CartActivity.this, food.getTitle(), Toast.LENGTH_SHORT).show();
-                        items = food;
-                        Toast.makeText(CartActivity.this, items.getTitle(), Toast.LENGTH_SHORT).show();
+                    ArrayList<Order> result = new ArrayList<>(response.body());
+                    if (result != null && !result.isEmpty()) {
+//                        GlobalVariable.listOrder.addAll(result);
+                        for (OrderItem x: listItemInsert){
+                            OrderItemRequest itemInsert = new OrderItemRequest(String.valueOf(result.get(0).getId()),String.valueOf(x.getProductId()),String.valueOf(x.getPrice()),String.valueOf(x.getQuantity()));
+                            System.out.println("Test Order ID : "+itemInsert.getOrderId());
+                            insertOrderItem(itemInsert);
+                        }
+                        Toast.makeText(CartActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                        OrderItemManager.clearOrderItems(CartActivity.this,GlobalVariable.userId);
+                        adapter.setOrderItems(new ArrayList<>());
+                        adapter.notifyDataSetChanged();
 
                     }
 
                 }
             }
+
             @Override
-            public void onFailure(Call<Food> call, Throwable t) {
-                // Xử lý lỗi khi gọi API
-                System.out.println(t.getMessage());
-//                Toast.makeText(CartActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<ArrayList<Order>> call, Throwable t) {
+                Toast.makeText(CartActivity.this, "Failed to fetch orders", Toast.LENGTH_SHORT).show();
             }
         });
-        return result[0];
+
     }
     private void InitWiget() {
         cardView =(RecyclerView) findViewById(R.id.cardView);
         placeOrder = (AppCompatButton) findViewById(R.id.btnPlaceOrder);
+        TextViewtotal = (TextView) findViewById(R.id.textViewTotal);
     }
-
 
 }
 

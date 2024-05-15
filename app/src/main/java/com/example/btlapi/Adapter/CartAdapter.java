@@ -12,6 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.btlapi.Activity.CartActivity;
 import com.example.btlapi.Domain.Food;
 import com.example.btlapi.Domain.OrderItem;
@@ -28,14 +31,23 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
     ArrayList<Food>listFood;
     Context context;
     double total ;
+    viewholder holderhientai;
 
     public CartAdapter(Context context,ArrayList<OrderItem> orderItems,ArrayList<Food> food) {
         this.context=context;
         this.orderItems = orderItems;
+        System.out.println("Trung 334: " + this.orderItems.get(0).getProductId());
         this.listFood =food;
         notifyDataSetChanged();
     }
-
+    public void setOrderItems(ArrayList<OrderItem> orderItems) {
+        holderhientai.subTotal.setText("$0");
+        holderhientai.delivery.setText("$0");
+        holderhientai.tax.setText("$0" );
+        holderhientai.Total.setText("$0");
+        this.orderItems = orderItems;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public CartAdapter.viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,7 +58,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
 
     @Override
     public void onBindViewHolder(@NonNull CartAdapter.viewholder holder, int position) {
-
+        holderhientai=holder;
         Food foodhientai = findfoodbyid(orderItems.get(position).getProductId());
         if (foodhientai==null) Toast.makeText(context,"Không có food",Toast.LENGTH_SHORT);
 
@@ -58,6 +70,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
         holder.feeEachItem.setText("$"+cal);
         holder.totalEachItem.setText("$"+foodhientai.getPrice());
         holder.num.setText(String.valueOf(quantity));
+        int imageResourceId = getImageResource(foodhientai.getImagePath());
+        if (imageResourceId != 0) {
+            Glide.with(context)
+                    .load(imageResourceId)
+                    .transform(new CenterCrop(), new RoundedCorners(30))
+                    .into(holder.pic);
+        } else {
+            holder.pic.setImageResource(R.drawable.google);
+        }
         total = getTotal();
         System.out.println("Total: " + total);
         DecimalFormat df = new DecimalFormat("#.##");
@@ -112,17 +133,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
             public void onClick(View v) {
 
 
-                    total-=foodhientai.getPrice();
-                    holder.subTotal.setText("$"+ String.valueOf(total));
-                    if (quantity-1 == 0) {
-                        orderItems.remove(itemhientai);
-                        OrderItemManager.removeOrderItem(context, 1, foodhientai.getId());
-                    } else {
-                        holder.num.setText(String.valueOf(quantity-1));
-                        // Cập nhật dữ liệu tạm thời
-                        itemhientai.setQuantity(quantity - 1);
-                        OrderItemManager.editOrderItems(context, 1, orderItems);
-                    }
+                total-=foodhientai.getPrice();
+                holder.subTotal.setText("$"+ String.valueOf(total));
+                if (quantity-1 == 0) {
+                    orderItems.remove(itemhientai);
+                    OrderItemManager.removeOrderItem(context, 1, foodhientai.getId());
+                } else {
+                    holder.num.setText(String.valueOf(quantity-1));
+                    // Cập nhật dữ liệu tạm thời
+                    itemhientai.setQuantity(quantity - 1);
+                    OrderItemManager.editOrderItems(context, 1, orderItems);
+                }
                 if(total > 20 ) {
                     String num1 = df.format(total * 10 / 100);
                     String num2 = df.format(total * 3 / 100);
@@ -139,9 +160,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
                     holder.tax.setText("$" + num2);
                     holder.Total.setText("$"+df.format(num3));
                 }
-                    // Cập nhật lại giao diện
-                    notifyDataSetChanged();
-                }
+                // Cập nhật lại giao diện
+                notifyDataSetChanged();
+            }
 
         });
     }
@@ -149,7 +170,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
     private Food findfoodbyid(int id) {
         for (Food foodz : listFood) {
             if(foodz.getId()==id)
-            return foodz;
+                return foodz;
         }
         return null;
     }
@@ -176,10 +197,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
             super(itemView);
             title = itemView.findViewById(R.id.cartTxt);
             pic = itemView.findViewById(R.id.pic);
-            feeEachItem = itemView.findViewById(R.id.totalPriceTxt);
+            feeEachItem = itemView.findViewById(R.id.singlePriceTxt);
             plusItem = itemView.findViewById(R.id.plusCartBtn);
             minusItem = itemView.findViewById(R.id.minusCartBtn);
-            totalEachItem = itemView.findViewById(R.id.singlePriceTxt);
+            totalEachItem = itemView.findViewById(R.id.totalPriceTxt);
             num = itemView.findViewById(R.id.numberItemTxt);
             // Lấy resources từ context
             Resources resources = context.getResources();
@@ -196,6 +217,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
 
         }
     }
-
+    private int getImageResource(String imageName) {
+        return context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
+    }
 }
 

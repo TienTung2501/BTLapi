@@ -61,6 +61,16 @@ public class OrderItemManager {
 
         }
     }
+    public static void clearOrderItems(Context context, int userId) {
+        // Xóa OrderItem khỏi bộ nhớ đệm
+        orderItemMap.remove(userId);
+
+        // Lấy SharedPreferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+
+        // Xóa OrderItem khỏi SharedPreferences
+        sharedPreferences.edit().remove(String.valueOf(userId)).apply();
+    }
 
     public static void saveOrderItems(Context context, int userId, List<OrderItem> orderItems) {
         // Lấy SharedPreferences
@@ -75,6 +85,20 @@ public class OrderItemManager {
 
         // Lưu danh sách OrderItem vào bộ nhớ đệm tạm thời để truy cập nhanh hơn
         orderItemMap.put(userId, orderItems);
+    }
+    public static  boolean findOrderUser (Context context, int userId){
+        // Kiểm tra xem OrderItem đã được lưu trong bộ nhớ đệm tạm thời chưa
+        if (orderItemMap.containsKey(userId)) {
+            return true;
+        }
+
+        // Lấy SharedPreferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+
+        // Lấy chuỗi JSON từ SharedPreferences dựa trên userId
+        String savedOrderItemsJson = sharedPreferences.getString(String.valueOf(userId),"x");
+        if (savedOrderItemsJson =="x") return false;
+        else return true;
     }
     public static void editOrderItems(Context context, int userId, List<OrderItem> newOrderItems) {
         // Lấy SharedPreferences
